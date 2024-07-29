@@ -105,6 +105,7 @@ class _TeamsScreenState extends State<TeamsScreen> {
           }
 
           return ListView.separated(
+            padding: const EdgeInsets.symmetric(vertical: 16),
             itemCount: snapshot.data!.length,
             itemBuilder: (context, index) {
               final team = snapshot.data![index];

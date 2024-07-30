@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:score_app_flutter/screens/matches_screen.dart';
+import 'package:score_app_flutter/screens/sign_in_screen.dart';
 import 'package:score_app_flutter/screens/subscribed_teams_screen.dart';
 import 'package:score_app_flutter/screens/teams_screen.dart';
 
@@ -31,7 +32,7 @@ class ScoreApp extends StatelessWidget {
           unselectedLabelStyle: TextStyle(color: Colors.grey),
         ),
       ),
-      home: const IndexScreen(),
+      home: const SignInScreen(),
     );
   }
 }

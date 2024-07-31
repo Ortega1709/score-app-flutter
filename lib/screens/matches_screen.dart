@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:score_app_flutter/model/user.dart';
 
 class MatchesScreen extends StatefulWidget {
-  const MatchesScreen({super.key});
+  final User user;
+  const MatchesScreen({super.key, required this.user});
 
   @override
   State<MatchesScreen> createState() => _MatchesScreenState();

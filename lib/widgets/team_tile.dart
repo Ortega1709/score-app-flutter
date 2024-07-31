@@ -6,11 +6,13 @@ import 'package:score_app_flutter/model/team.dart';
 class TeamTile extends StatelessWidget {
   final Team team;
   final Function()? onTap;
+  final Function()? onDelete;
 
   const TeamTile({
     super.key,
     required this.team,
     required this.onTap,
+    required this.onDelete,
   });
 
   @override
@@ -55,6 +57,7 @@ class TeamTile extends StatelessWidget {
               ),
         title: Text(team.name),
         subtitle: Text(team.country),
+        trailing: onDelete!= null ? IconButton(onPressed: onDelete, icon: const Icon(Icons.notifications_off)) : null,
       ),
     );
   }

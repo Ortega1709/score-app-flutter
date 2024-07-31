@@ -1,9 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:score_app_flutter/model/user.dart';
+import 'package:score_app_flutter/screens/account_screen.dart';
 import 'package:score_app_flutter/screens/matches_screen.dart';
-import 'package:score_app_flutter/screens/sign_in_screen.dart';
 import 'package:score_app_flutter/screens/subscribed_teams_screen.dart';
 import 'package:score_app_flutter/screens/teams_screen.dart';
+import 'package:score_app_flutter/entry_point.dart';
 
 void main() {
   runApp(const ScoreApp());
@@ -11,11 +13,15 @@ void main() {
 
 class ScoreApp extends StatelessWidget {
   const ScoreApp({super.key});
+
+
   @override
   Widget build(BuildContext context) {
+
     return MaterialApp(
       title: 'Score App',
       theme: ThemeData(
+        fontFamily: "Helvetica",
         colorScheme: const ColorScheme.light(primary: Colors.black),
         visualDensity: VisualDensity.adaptivePlatformDensity,
         scaffoldBackgroundColor: const Color(0xffF9F9FB),
@@ -32,13 +38,14 @@ class ScoreApp extends StatelessWidget {
           unselectedLabelStyle: TextStyle(color: Colors.grey),
         ),
       ),
-      home: const SignInScreen(),
+      home: const EntryPoint(),
     );
   }
 }
 
 class IndexScreen extends StatefulWidget {
-  const IndexScreen({super.key});
+  final User user;
+  const IndexScreen({super.key, required this.user});
 
   @override
   State<IndexScreen> createState() => _IndexScreenState();
@@ -46,19 +53,17 @@ class IndexScreen extends StatefulWidget {
 
 class _IndexScreenState extends State<IndexScreen> {
   int currentIndex = 0;
-  final screens = const [
-    TeamsScreen(),
-    SubscribedTeamsScreen(),
-    MatchesScreen()
-  ];
 
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
+    final screens = [
+      TeamsScreen(user: widget.user),
+      MatchesScreen(user: widget.user),
+      SubscribedTeamsScreen(user: widget.user),
+      AccountScreen(user: widget.user)
+    ];
+
     return Scaffold(
       body: screens[currentIndex],
       bottomNavigationBar: BottomNavigationBar(
@@ -93,9 +98,15 @@ class _IndexScreenState extends State<IndexScreen> {
             ),
             label: "Subscribed Teams",
           ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              CupertinoIcons.person_alt_circle_fill,
+              size: 24,
+            ),
+            label: "Account",
+          ),
         ],
       ),
     );
   }
 }
-

@@ -1,4 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:score_app_flutter/model/user.dart';
+import 'package:score_app_flutter/utils/constants.dart';
 
 import '../widgets/m_button.dart';
 
@@ -15,6 +20,14 @@ class _SignupScreenState extends State<SignupScreen> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
+  bool isLoading = false;
+
+  @override
+  void initState() {
+    isLoading = false;
+    super.initState();
+  }
+
   @override
   void dispose() {
     usernameController.dispose();
@@ -23,8 +36,34 @@ class _SignupScreenState extends State<SignupScreen> {
     super.dispose();
   }
 
-  signUp(String username, String email, String password) {
+  Future<User?> signUp(String username, String email, String password) async {
+    const endpoint = '${Constants.host}api/v1/users/signup';
+    final body = {
+      "username": username,
+      "email": email,
+      "password": password,
+    };
 
+    final headers = {
+      'Content-Type': 'application/json',
+    };
+
+    final response = await http.post(
+      headers: headers,
+      Uri.parse(endpoint),
+      body: json.encode(body),
+    );
+
+
+    if (response.statusCode == 200) {
+      if (response.body.isNotEmpty) {
+        final data = json.decode(response.body);
+        return User.fromJson(data);
+      }
+    } else {
+      throw Exception('Failed to load teams');
+    }
+    return null;
   }
 
   @override
@@ -60,7 +99,21 @@ class _SignupScreenState extends State<SignupScreen> {
                 decoration: const InputDecoration(hintText: "Password"),
               ),
               const SizedBox(height: 32),
-              MButton(text: "Sign up", onPressed: () {}),
+              MButton(
+                text: "Sign up",
+                onPressed: () {
+                  setState(() {
+                    isLoading = true;
+                  });
+                  if (formKey.currentState!.validate()) {
+                    signUp(
+                      usernameController.text,
+                      emailController.text,
+                      passwordController.text,
+                    );
+                  }
+                },
+              ),
               const SizedBox(height: 16),
             ],
           ),

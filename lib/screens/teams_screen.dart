@@ -2,22 +2,29 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:score_app_flutter/model/user.dart';
+import 'package:score_app_flutter/screens/subscribe_team.dart';
+import 'package:score_app_flutter/utils/constants.dart';
 import 'package:score_app_flutter/widgets/m_button.dart';
 import 'package:score_app_flutter/widgets/team_tile.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../model/team.dart';
 
 class TeamsScreen extends StatefulWidget {
-  const TeamsScreen({super.key});
+  final User user;
+
+  const TeamsScreen({super.key, required this.user});
 
   @override
   State<TeamsScreen> createState() => _TeamsScreenState();
 }
 
 class _TeamsScreenState extends State<TeamsScreen> {
+
   Future<List<Team>?> getTeams() async {
-    const endpoint = 'http://localhost:8080/api/v1/teams';
+    const endpoint = '${Constants.host}api/v1/teams';
     final response = await http.get(Uri.parse(endpoint));
 
     if (response.statusCode == 200) {
@@ -29,57 +36,12 @@ class _TeamsScreenState extends State<TeamsScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    void showSuscribeModalSheet(Team team, BuildContext context) {
-      showModalBottomSheet(
-        context: context,
-        useSafeArea: true,
-        isScrollControlled: true,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(16),
-            topRight: Radius.circular(16),
-          ),
-        ),
-        backgroundColor: Colors.white,
-        builder: (BuildContext context) {
-          return SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                ListTile(
-                  title: Text(
-                    "Suscribe team ${team.name}",
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyLarge
-                        ?.copyWith(fontWeight: FontWeight.bold),
-                  ),
-                  trailing: InkWell(
-                    onTap: () {
-                      Navigator.pop(context);
-                    },
-                    child: const Icon(
-                      Icons.close,
-                      size: 20,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 16),
-                TeamTile(team: team, onTap: null),
-                const SizedBox(height: 16),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: MButton(text: "Suscribe", onPressed: () {}),
-                ),
-                const SizedBox(height: 16),
-              ],
-            ),
-          );
-        },
-      );
-    }
+  void initState() {
+    super.initState();
+  }
 
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Teams'),
@@ -113,8 +75,16 @@ class _TeamsScreenState extends State<TeamsScreen> {
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: TeamTile(
                   team: team,
+                  onDelete: null,
                   onTap: () {
-                    showSuscribeModalSheet(team, context);
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => SubscribeTeam(
+                          team: team,
+                          user: widget.user,
+                        ),
+                      ),
+                    );
                   },
                 ),
               );

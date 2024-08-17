@@ -6,8 +6,11 @@ import 'package:score_app_flutter/screens/matches_screen.dart';
 import 'package:score_app_flutter/screens/subscribed_teams_screen.dart';
 import 'package:score_app_flutter/screens/teams_screen.dart';
 import 'package:score_app_flutter/entry_point.dart';
+import 'package:score_app_flutter/services/notification_service.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await NotificationService.intitializeNotification();
   runApp(const ScoreApp());
 }
 
@@ -28,6 +31,7 @@ class ScoreApp extends StatelessWidget {
         appBarTheme: const AppBarTheme(
           surfaceTintColor: Color(0xffF9F9FB),
           backgroundColor: Color(0xffF9F9FB),
+          centerTitle: false
         ),
         bottomNavigationBarTheme: const BottomNavigationBarThemeData(
           elevation: 1,

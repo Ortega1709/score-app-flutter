@@ -61,6 +61,12 @@ class _SignupScreenState extends State<SignupScreen> {
         return User.fromJson(data);
       }
     } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Registration failed"),
+          backgroundColor: Colors.red,
+        ),
+      );
       throw Exception('Failed to load teams');
     }
     return null;
@@ -102,9 +108,7 @@ class _SignupScreenState extends State<SignupScreen> {
               MButton(
                 text: "Sign up",
                 onPressed: () {
-                  setState(() {
-                    isLoading = true;
-                  });
+                  print("Click on logout");
                   if (formKey.currentState!.validate()) {
                     signUp(
                       usernameController.text,

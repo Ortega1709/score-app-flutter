@@ -57,7 +57,7 @@ class TeamTile extends StatelessWidget {
               ),
         title: Text(team.name),
         subtitle: Text(team.country),
-        trailing: onDelete!= null ? IconButton(onPressed: onDelete, icon: const Icon(Icons.notifications_off)) : null,
+        trailing: onDelete != null ? IconButton(onPressed: onDelete, icon: const Icon(Icons.notifications_off)) : null,
       ),
     );
   }
